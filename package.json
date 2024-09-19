@@ -1,0 +1,28 @@
+{
+  "name": "generator-gin",
+  "version": "1.0.0",
+  "description": "Project generator for gin web framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuchengli/generator-gin.git"
+  },
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "li xu cheng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuchengli/generator-gin/issues"
+  },
+  "homepage": "https://github.com/xuchengli/generator-gin#readme",
+  "dependencies": {
+    "yeoman-generator": "^7.3.2"
+  }
+}
