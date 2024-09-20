@@ -1,0 +1,53 @@
+package config
+
+import (
+	"github.com/kelseyhightower/envconfig"
+	"github.com/spf13/viper"
+)
+
+// LogConfiguration 日志配置
+type LogConfiguration struct {
+	Level string `envconfig:"LOG_LEVEL"` // info / debug / trace
+}
+
+// RedisConfiguration redis配置
+type RedisConfiguration struct {
+	Host string `envconfig:"REDIS_HOST"`
+	Port int    `envconfig:"REDIS_PORT"`
+	Pass string `envconfig:"REDIS_PASS"`
+}
+
+// MySQLConfiguration 数据库配置
+type MySQLConfiguration struct {
+	User  string `envconfig:"DB_USER"`
+	Pass  string `envconfig:"DB_PASS"`
+	Host  string `envconfig:"DB_HOST"`
+	Port  int    `envconfig:"DB_PORT"`
+	DB    string `envconfig:"DB_NAME"`
+	Debug bool   `envconfig:"DB_DEBUG"`
+}
+
+// Configuration 配置
+type Configuration struct {
+	Log   LogConfiguration
+	Redis RedisConfiguration
+	MySQL MySQLConfiguration
+}
+
+func LoadConfig() Configuration {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+
+	if err := viper.ReadInConfig(); err != nil {
+		panic(err)
+	}
+
+	var config Configuration
+	if err := viper.Unmarshal(&config); err != nil {
+		panic(err)
+	}
+	if err := envconfig.Process("", &config); err != nil {
+		panic(err)
+	}
+	return config
+}
