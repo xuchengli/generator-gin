@@ -1,0 +1,18 @@
+package models
+
+import (
+	"time"
+)
+
+type UserModel struct {
+	ID         uint64    `gorm:"column:id;          type:int;       not null;          primaryKey;autoIncrement"`
+	UserName   string    `gorm:"column:user_name;   type:string;    not null; size:32; uniqueIndex"`
+	Password   string    `gorm:"column:password;    type:string;    not null; size:32"`
+	CreateTime time.Time `gorm:"column:create_time; type:timestamp; not null;          default:CURRENT_TIMESTAMP"`
+	UpdateTime time.Time `gorm:"column:update_time; type:timestamp; not null;          default:CURRENT_TIMESTAMP"`
+}
+
+// TableName 约束表名
+func (UserModel) TableName() string {
+	return "user"
+}

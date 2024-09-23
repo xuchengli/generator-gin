@@ -87,6 +87,21 @@ export default class extends Generator {
         'project_name': this.answers.projectName,
       },
     )
+    this.fs.copyTpl(this.templatePath('models/user.go.ejs'), this.destinationPath('models/user.go'));
+    this.fs.copyTpl(
+      this.templatePath('db/db.go.ejs'),
+      this.destinationPath('db/db.go'),
+      {
+        'project_name': this.answers.projectName,
+      },
+    )
+    this.fs.copyTpl(
+      this.templatePath('redis/redis.go.ejs'),
+      this.destinationPath('redis/redis.go'),
+      {
+        'project_name': this.answers.projectName,
+      },
+    )
     this.fs.copyTpl(
       this.templatePath('main.go.ejs'),
       this.destinationPath('main.go'),
