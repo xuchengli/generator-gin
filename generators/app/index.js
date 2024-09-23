@@ -80,8 +80,23 @@ export default class extends Generator {
       },
     );
     this.fs.copyTpl(this.templatePath('config/config.go.ejs'), this.destinationPath('config/config.go'));
+    this.fs.copyTpl(
+      this.templatePath('log/log.go.ejs'),
+      this.destinationPath('log/log.go'),
+      {
+        'project_name': this.answers.projectName,
+      },
+    )
+    this.fs.copyTpl(
+      this.templatePath('main.go.ejs'),
+      this.destinationPath('main.go'),
+      {
+        'project_name': this.answers.projectName,
+      },
+    )
   }
   install() {
-    this.log('安装依赖');
+    this.log('3. 安装依赖');
+    this.spawnSync('go', ['mod', 'tidy']);
   }
 };

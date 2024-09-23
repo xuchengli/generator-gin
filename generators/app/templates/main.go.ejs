@@ -1,0 +1,13 @@
+package main
+
+import (
+	"<%= project_name %>/config"
+	"<%= project_name %>/log"
+)
+
+func main() {
+	cfg := config.LoadConfig()
+
+	// 初始化日志格式
+	log.Init(cfg)
+}

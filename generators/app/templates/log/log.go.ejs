@@ -1,0 +1,28 @@
+package log
+
+import (
+	"<%= project_name %>/config"
+
+	log "github.com/sirupsen/logrus"
+	prefixed "github.com/x-cray/logrus-prefixed-formatter"
+)
+
+func Init(config config.Configuration) {
+	if config.Log.Level == "trace" {
+		log.SetLevel(log.TraceLevel)
+	} else if config.Log.Level == "debug" {
+		log.SetLevel(log.DebugLevel)
+	} else {
+		log.SetLevel(log.InfoLevel)
+	}
+	formatter := prefixed.TextFormatter{
+		ForceColors:     true,
+		ForceFormatting: true,
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	}
+	formatter.SetColorScheme(&prefixed.ColorScheme{
+		DebugLevelStyle: "blue+b",
+	})
+	log.SetFormatter(&formatter)
+}
