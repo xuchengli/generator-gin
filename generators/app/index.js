@@ -103,6 +103,13 @@ export default class extends Generator {
       },
     )
     this.fs.copyTpl(
+      this.templatePath('application/context.go.ejs'),
+      this.destinationPath('application/context.go'),
+      {
+        'project_name': this.answers.projectName,
+      },
+    )
+    this.fs.copyTpl(
       this.templatePath('main.go.ejs'),
       this.destinationPath('main.go'),
       {

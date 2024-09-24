@@ -1,0 +1,24 @@
+package application
+
+import (
+	"<%= project_name %>/config"
+  "<%= project_name %>/db"
+  rds "<%= project_name %>/redis"
+
+	"github.com/redis/go-redis/v9"
+	"gorm.io/gorm"
+)
+
+type Context struct {
+	Config config.Configuration
+	Redis  *redis.Client
+	Db     *gorm.DB
+}
+
+func InitContext(cfg config.Configuration) Context {
+  return Context{
+    Config: cfg,
+    Redis:  rds.Connect(cfg),
+		Db:     db.Connect(cfg),
+  }
+}
