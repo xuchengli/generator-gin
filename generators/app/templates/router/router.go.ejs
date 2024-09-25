@@ -14,6 +14,7 @@ func InitRoutes(ctx application.Context) *gin.Engine {
 
 	api := r.Group("/api")
 	{
+		api.POST("/user/register", userCtrl.Register)
 		api.GET("/users", userCtrl.List)
 	}
 	return r

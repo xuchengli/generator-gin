@@ -2,11 +2,15 @@ package controllers
 
 import (
 	"<%= project_name %>/application"
+  "<%= project_name %>/data"
 	"<%= project_name %>/enums"
+  "<%= project_name %>/models"
 	"<%= project_name %>/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+  log "github.com/sirupsen/logrus"
 )
 
 type UserController struct {
@@ -20,6 +24,26 @@ func NewUserController(ctx application.Context) UserController {
 		ctx:     ctx,
 		userSvc: services.NewUserService(ctx),
 	}
+}
+
+func (uc *UserController) Register(c *gin.Context) {
+  var req data.UserRegisterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		uc.Error(c, http.StatusBadRequest, enums.InvalidParameter, err.Error())
+		return
+	}
+
+	log.WithFields(log.Fields{"用户名": req.UserName, "密码": req.Password}).Info("用户注册")
+
+  user := models.UserModel{
+    UserName: req.UserName,
+    Password: req.Password,
+  }
+  if err := uc.userSvc.Save(user); err != nil {
+    uc.Error(c, http.StatusInternalServerError, enums.InvalidDBOperation, err.Error())
+    return
+  }
+  uc.Success(c)
 }
 
 func (uc *UserController) List(c *gin.Context) {

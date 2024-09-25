@@ -13,6 +13,10 @@ func NewUserService(ctx application.Context) UserService {
 	return UserService{ctx}
 }
 
+func (us UserService) Save(user models.UserModel) error {
+	return us.ctx.Db.Create(&user).Error
+}
+
 func (us UserService) List() (users []models.UserModel, err error) {
 	err = us.ctx.Db.Model(&models.UserModel{}).Find(&users).Error
 	return
