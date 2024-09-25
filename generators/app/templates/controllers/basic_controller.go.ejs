@@ -1,0 +1,44 @@
+package controllers
+
+import (
+	"<%= project_name %>/enums"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type BasicController struct{}
+
+func (c *BasicController) Success(ctx *gin.Context, data ...interface{}) {
+	var d interface{}
+	if len(data) > 0 {
+		d = data[0]
+	}
+	res := struct {
+		Code enums.ResponseCode `json:"code"`
+		Msg  string             `json:"msg"`
+		Data interface{}        `json:"data,omitempty"`
+	}{
+		Code: enums.Success,
+		Msg:  "success",
+		Data: d,
+	}
+	ctx.AbortWithStatusJSON(http.StatusOK, res)
+}
+
+func (c *BasicController) Error(ctx *gin.Context, httpStatus int, responseCode enums.ResponseCode, message string, reason ...string) {
+	var cause string
+	if len(reason) > 0 {
+		cause = reason[0]
+	}
+	res := struct {
+		Code   enums.ResponseCode `json:"code"`
+		Msg    string             `json:"msg"`
+		Reason string             `json:"reason,omitempty"`
+	}{
+		Code:   responseCode,
+		Msg:    message,
+		Reason: cause,
+	}
+	ctx.AbortWithStatusJSON(httpStatus, res)
+}

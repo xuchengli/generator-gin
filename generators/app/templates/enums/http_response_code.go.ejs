@@ -1,0 +1,12 @@
+package enums
+
+type ResponseCode int
+
+const (
+	Success ResponseCode = iota
+	InvalidToken
+	InvalidParameter
+	InvalidDBOperation
+	RecordNotFound
+	InternalServerError
+)

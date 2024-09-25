@@ -1,8 +1,10 @@
 package main
 
 import (
+	"<%= project_name %>/application"
 	"<%= project_name %>/config"
 	"<%= project_name %>/log"
+	"<%= project_name %>/router"
 )
 
 func main() {
@@ -10,4 +12,9 @@ func main() {
 
 	// 初始化日志格式
 	log.Init(cfg)
+
+	// 初始化路由
+	r := router.InitRoutes(application.InitContext(cfg))
+
+	r.Run()
 }

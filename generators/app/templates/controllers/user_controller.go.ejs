@@ -1,0 +1,32 @@
+package controllers
+
+import (
+	"<%= project_name %>/application"
+	"<%= project_name %>/enums"
+	"<%= project_name %>/services"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type UserController struct {
+	BasicController
+	ctx     application.Context
+	userSvc services.UserService
+}
+
+func NewUserController(ctx application.Context) UserController {
+	return UserController{
+		ctx:     ctx,
+		userSvc: services.NewUserService(ctx),
+	}
+}
+
+func (uc *UserController) List(c *gin.Context) {
+	users, err := uc.userSvc.List()
+	if err != nil {
+		uc.Error(c, http.StatusInternalServerError, enums.InvalidDBOperation, err.Error())
+		return
+	}
+	uc.Success(c, users)
+}

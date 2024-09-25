@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/xuchengli/generator-gin#readme",
   "dependencies": {
+    "glob": "^11.0.0",
     "yeoman-generator": "^7.3.2"
   }
 }

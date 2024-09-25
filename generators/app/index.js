@@ -1,4 +1,7 @@
 import Generator from 'yeoman-generator';
+import { glob } from 'glob';
+import fs from 'fs';
+import path from 'path';
 
 export default class extends Generator {
   async prompting() {
@@ -65,57 +68,29 @@ export default class extends Generator {
   }
   writing() {
     this.log('2. 生成项目文件');
-    this.fs.copyTpl(
-      this.templatePath('config.ini.ejs'),
-      this.destinationPath('config.ini'),
-      {
-        'redis_host': this.answers.redisHost,
-        'redis_port': this.answers.redisPort,
-        'redis_pass': this.answers.redisPassword,
-        'mysql_user': this.answers.mysqlUser,
-        'mysql_pass': this.answers.mysqlPassword,
-        'mysql_host': this.answers.mysqlHost,
-        'mysql_port': this.answers.mysqlPort,
-        'mysql_db': this.answers.mysqlDatabase,
-      },
-    );
-    this.fs.copyTpl(this.templatePath('config/config.go.ejs'), this.destinationPath('config/config.go'));
-    this.fs.copyTpl(
-      this.templatePath('log/log.go.ejs'),
-      this.destinationPath('log/log.go'),
-      {
-        'project_name': this.answers.projectName,
-      },
-    )
-    this.fs.copyTpl(this.templatePath('models/user.go.ejs'), this.destinationPath('models/user.go'));
-    this.fs.copyTpl(
-      this.templatePath('db/db.go.ejs'),
-      this.destinationPath('db/db.go'),
-      {
-        'project_name': this.answers.projectName,
-      },
-    )
-    this.fs.copyTpl(
-      this.templatePath('redis/redis.go.ejs'),
-      this.destinationPath('redis/redis.go'),
-      {
-        'project_name': this.answers.projectName,
-      },
-    )
-    this.fs.copyTpl(
-      this.templatePath('application/context.go.ejs'),
-      this.destinationPath('application/context.go'),
-      {
-        'project_name': this.answers.projectName,
-      },
-    )
-    this.fs.copyTpl(
-      this.templatePath('main.go.ejs'),
-      this.destinationPath('main.go'),
-      {
-        'project_name': this.answers.projectName,
-      },
-    )
+
+    const files = glob.sync(`${this.sourceRoot()}/**`, { dot: true });
+
+    files.forEach(file => {
+      if (!fs.statSync(file).isDirectory()) {
+        const filePath = path.relative(this.sourceRoot(), file);
+        this.fs.copyTpl(
+          this.templatePath(filePath),
+          this.destinationPath(filePath.substring(0, filePath.lastIndexOf('.'))),
+          {
+            'redis_host': this.answers.redisHost,
+            'redis_port': this.answers.redisPort,
+            'redis_pass': this.answers.redisPassword,
+            'mysql_user': this.answers.mysqlUser,
+            'mysql_pass': this.answers.mysqlPassword,
+            'mysql_host': this.answers.mysqlHost,
+            'mysql_port': this.answers.mysqlPort,
+            'mysql_db': this.answers.mysqlDatabase,
+            'project_name': this.answers.projectName,
+          },
+        );
+      }
+    });
   }
   install() {
     this.log('3. 安装依赖');

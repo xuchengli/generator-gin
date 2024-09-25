@@ -1,0 +1,19 @@
+package services
+
+import (
+	"<%= project_name %>/application"
+	"<%= project_name %>/models"
+)
+
+type UserService struct {
+	ctx application.Context
+}
+
+func NewUserService(ctx application.Context) UserService {
+	return UserService{ctx}
+}
+
+func (us UserService) List() (users []models.UserModel, err error) {
+	err = us.ctx.Db.Model(&models.UserModel{}).Find(&users).Error
+	return
+}

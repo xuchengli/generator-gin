@@ -1,0 +1,20 @@
+package router
+
+import (
+	"<%= project_name %>/application"
+  "<%= project_name %>/controllers"
+
+	"github.com/gin-gonic/gin"
+)
+
+func InitRoutes(ctx application.Context) *gin.Engine {
+  userCtrl := controllers.NewUserController(ctx)
+
+	r := gin.Default()
+
+	api := r.Group("/api")
+	{
+		api.GET("/users", userCtrl.List)
+	}
+	return r
+}
