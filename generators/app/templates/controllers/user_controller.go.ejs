@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"<%= project_name %>/application"
-  "<%= project_name %>/data"
 	"<%= project_name %>/enums"
   "<%= project_name %>/models"
 	"<%= project_name %>/services"
+	"<%= project_name %>/types"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,19 +15,19 @@ import (
 
 type UserController struct {
 	BasicController
-	ctx     application.Context
-	userSvc services.UserService
+	ctx  application.Context
+	user services.UserService
 }
 
 func NewUserController(ctx application.Context) UserController {
 	return UserController{
-		ctx:     ctx,
-		userSvc: services.NewUserService(ctx),
+		ctx:  ctx,
+		user: services.NewUserService(ctx),
 	}
 }
 
 func (uc *UserController) Register(c *gin.Context) {
-  var req data.UserRegisterRequest
+  var req types.UserRegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		uc.Error(c, http.StatusBadRequest, enums.InvalidParameter, err.Error())
 		return
@@ -39,7 +39,7 @@ func (uc *UserController) Register(c *gin.Context) {
     UserName: req.UserName,
     Password: req.Password,
   }
-  if err := uc.userSvc.Save(user); err != nil {
+  if err := uc.user.Save(user); err != nil {
     uc.Error(c, http.StatusInternalServerError, enums.InvalidDBOperation, err.Error())
     return
   }
@@ -47,7 +47,7 @@ func (uc *UserController) Register(c *gin.Context) {
 }
 
 func (uc *UserController) List(c *gin.Context) {
-	users, err := uc.userSvc.List()
+	users, err := uc.user.List()
 	if err != nil {
 		uc.Error(c, http.StatusInternalServerError, enums.InvalidDBOperation, err.Error())
 		return
